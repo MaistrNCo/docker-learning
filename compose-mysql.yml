@@ -1,0 +1,36 @@
+version: '3.1'
+services:
+  mysql-db:
+    image: mysql
+    container_name: mysql-db
+    restart: always
+    environment:
+      MYSQL_DATABASE: iot
+      MYSQL_USER: mysql
+      MYSQL_PASSWORD: mysql
+      MYSQL_ROOT_PASSWORD: passw0rd
+    ports:
+      - 3306:3306
+#    volumes:
+#      - ./sql:/docker-entrypoint-initdb.d
+  web:
+    container_name: restAPImysql
+    build:
+      context: .
+      dockerfile: Dockerfile-mysql
+    ports:
+      - 8888:8080
+    depends_on:
+      - mysql-db
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+# Volumes
+#volumes:
+#  ./sql:
+
+# Networks to be created to facilitate communication between containers
+#networks:
+#  demoNet:

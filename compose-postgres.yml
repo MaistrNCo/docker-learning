@@ -1,0 +1,35 @@
+version: '3.8'
+services:
+  postgres-db:
+    image: postgres
+    container_name: postgres-db
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: iot
+    ports:
+      - 5432:5432
+#    volumes:
+#      - ./sql:/docker-entrypoint-initdb.d
+  web:
+    container_name: restAPI
+    build:
+      context: .
+      dockerfile: Dockerfile-postgres
+
+    ports:
+      - 9088:8080
+    depends_on:
+      - postgres-db
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 9080:8080
+# Volumes
+#volumes:
+#  ./sql:
+
+# Networks to be created to facilitate communication between containers
+#networks:
+#  demoNet:
