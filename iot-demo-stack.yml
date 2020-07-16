@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+        postgres-db:
+                image: postgres
+                container_name: postgres-db
+                restart: always
+                environment:
+                               POSTGRES_PASSWORD: postgres
+                               POSTGRES_DB: iot
+                ports:
+                        - "5432:5432"
+        adminer:
+                image: adminer
+                container_name: adminer
+                restart: always
+                ports:
+                        - "9080:8080"
+        rest:
+                container_name: restAPI
+                image: 34.223.214.52:5000/sample_web
+                deploy:
+                        mode: replicated
+                        replicas: 6
+                ports:
+                        - "8080:8080"
+                depends_on:
+                        - "postgres-db"
