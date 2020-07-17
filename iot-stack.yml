@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+	postgres-db:
+		image: postgres
+		restart: always
+
+		environment:
+			POSTGRES_PASSWORD: postgres
+			POSTGRES_DB: iot
+
+		ports:
+			- "5432:5432"
+
+	adminer:
+		image: adminer
+		restart: always
+		ports:
+		- "9080:8080"
+
+	rest:
+		image: 10.0.2.4:5000/iot_demo
+
+		environment:
+			- db_url=jdbc:postgresql://postgres-db:5432/iot
+			- db_user=postgres
+			- db_password=postgres
+
+		env_file:
+			- postgres.env
+
+		deploy:
+			mode: replicated
+			replicas: 3
+
+		ports:
+			- "8080:8080"
+
+		depends_on:
+			- "postgres-db"
