@@ -1,0 +1,39 @@
+
+Install Docker with script
+
+	curl -fsSL https://get.docker.com -o get-docker.sh
+	sudo sh get-docker.sh
+	
+	sudo usermod -aG docker your-user
+	newgrp docker
+
+Uninstall
+	sudo apt-get purge docker-ce docker-ce-cli containerd.io
+ 	sudo rm -rf /var/lib/docker
+
+
+https://docs.docker.com/engine/swarm/swarm-tutorial/create-swarm/
+
+
+docker swarm init
+docker swarm join-token manager
+
+docker service create --replicas 2 --name nginx -p 8080:80 nginx:1.18
+docker service ps nginx
+docker service scale nginx=1
+
+docker service update --image nginx nginx 
+
+docker node update --availability drain node2
+
+docker run -d -p 5000:5000 --name registry registry
+
+/etc/docker/daemon.json
+	{"insecure-registries":["10.0.2.4:5000"]}
+
+docker image tag iot_demo 10.0.2.4:5000/iot_demo
+docker push 10.0.2.4:5000/iot_demo
+docker pull 10.0.2.4:5000/iot_demo
+
+docker stack deploy -c iot-stack.yml demo-stack
+
